@@ -67,10 +67,10 @@ void mh()
   rootlogon(); // style
 
   if (globesscalefactor) potFD = potFD * 0.95;
-  
+
   if(TFile(stateFname).IsZombie()){
     std::cout << "No state available, please run spec.C true" << std::endl;
-    }
+  }
   else{    
     if (normsyst) {
       systlist.insert(systlist.end(), normlist_sig.begin(), normlist_sig.end()); 
@@ -112,7 +112,7 @@ void mh()
     double thisdcp;
 
     for(double idcp = 0; idcp < 37; ++idcp) {
-	
+
       thisdcp = -TMath::Pi() + idcp*dcpstep;
 
       osc::IOscCalculatorAdjustable* trueOsc = NuFitOscCalc(hie);
@@ -136,9 +136,9 @@ void mh()
       dis_expt_rhc_syst.SetMaskHist(0.5,8.0);
 
       std::vector<const IFitVar*> oscVars =
-	{&kFitDmSq32Scaled, &kFitSinSqTheta23, &kFitTheta13, 
-	 &kFitSinSq2Theta12, &kFitDmSq21,
-	 &kFitDeltaInPiUnits, &kFitRho};
+        {&kFitDmSq32Scaled, &kFitSinSqTheta23, &kFitTheta13, 
+          &kFitSinSq2Theta12, &kFitDmSq21,
+          &kFitDeltaInPiUnits, &kFitRho};
 
       std::vector<const IFitVar*> oscVars_scan = {};
 
@@ -146,62 +146,62 @@ void mh()
       double thischisq;
 
       for(int ioct = -1; ioct <= 1; ioct += 2) {
-	//osc::IOscCalculatorAdjustable* testOsc = NuFitOscCalcCDR(hie);	
-	osc::IOscCalculatorAdjustable* testOsc = NuFitOscCalc(hie,ioct);	
-	testOsc->SetDmsq32(-1*testOsc->GetDmsq32());
+        //osc::IOscCalculatorAdjustable* testOsc = NuFitOscCalcCDR(hie);	
+        osc::IOscCalculatorAdjustable* testOsc = NuFitOscCalc(hie,ioct);	
+        testOsc->SetDmsq32(-1*testOsc->GetDmsq32());
 
-	//if (ioct < 0) {
-	//testOsc->SetTh23(TMath::PiOver2() - testOsc->GetTh23());
-	//}
+        //if (ioct < 0) {
+        //testOsc->SetTh23(TMath::PiOver2() - testOsc->GetTh23());
+        //}
 
-	if (prescan) {
-	  double scanmin = 99999;
-	  for (int idcp_scan = 0; idcp_scan < 41; ++idcp_scan) {
-	    double dcp_scan = -TMath::Pi() + idcp_scan*2*TMath::Pi()/40;
-	    for (int ith_scan = 0; ith_scan < 41; ++ith_scan) {
-	      double th13_scan = (2.5 + ith_scan*9.0/40)*TMath::Pi()/180;
-	      osc::IOscCalculatorAdjustable* scanOsc = testOsc->Copy();
-	      scanOsc->SetdCP(dcp_scan);
-	      scanOsc->SetTh13(th13_scan);
-	      osc::IOscCalculatorAdjustable* cvcalc = scanOsc->Copy();	  
-	      MultiExperiment full_expt_syst({&app_expt_fhc_syst, &app_expt_rhc_syst, &dis_expt_fhc_syst, &dis_expt_rhc_syst});
-	      Fitter fit_scan(&full_expt_syst, oscVars_scan, {});
-	      double scanchisq = fit_scan.Fit(scanOsc, Fitter::kQuiet);
-	      if (scanchisq < scanmin) {
-		scanmin = scanchisq;
-		testOsc->SetdCP(dcp_scan);
-		testOsc->SetTh13(th13_scan);
-	      }
-	      //std::cout << "scanning: " << thisdcp << " " << dcp_scan << " " << th13_scan << " " << scanchisq << " " << scanmin << std::endl;
-	    }
-	  }
-	}
-	else {
-	  testOsc->SetdCP(thisdcp);
-	}
+        if (prescan) {
+          double scanmin = 99999;
+          for (int idcp_scan = 0; idcp_scan < 41; ++idcp_scan) {
+            double dcp_scan = -TMath::Pi() + idcp_scan*2*TMath::Pi()/40;
+            for (int ith_scan = 0; ith_scan < 41; ++ith_scan) {
+              double th13_scan = (2.5 + ith_scan*9.0/40)*TMath::Pi()/180;
+              osc::IOscCalculatorAdjustable* scanOsc = testOsc->Copy();
+              scanOsc->SetdCP(dcp_scan);
+              scanOsc->SetTh13(th13_scan);
+              osc::IOscCalculatorAdjustable* cvcalc = scanOsc->Copy();	  
+              MultiExperiment full_expt_syst({&app_expt_fhc_syst, &app_expt_rhc_syst, &dis_expt_fhc_syst, &dis_expt_rhc_syst});
+              Fitter fit_scan(&full_expt_syst, oscVars_scan, {});
+              double scanchisq = fit_scan.Fit(scanOsc, Fitter::kQuiet);
+              if (scanchisq < scanmin) {
+                scanmin = scanchisq;
+                testOsc->SetdCP(dcp_scan);
+                testOsc->SetTh13(th13_scan);
+              }
+              //std::cout << "scanning: " << thisdcp << " " << dcp_scan << " " << th13_scan << " " << scanchisq << " " << scanmin << std::endl;
+            }
+          }
+        }
+        else {
+          testOsc->SetdCP(thisdcp);
+        }
 
-	//osc::IOscCalculatorAdjustable* cvcalc = testOsc->Copy();	  
-	//Penalizer_GlbLikeCDR penalty(cvcalc,hie); 
-	Penalizer_GlbLike penalty(hie,ioct,th13penalty,false,false);
+        //osc::IOscCalculatorAdjustable* cvcalc = testOsc->Copy();	  
+        //Penalizer_GlbLikeCDR penalty(cvcalc,hie); 
+        Penalizer_GlbLike penalty(hie,ioct,th13penalty,false,false);
 
-	MultiExperiment full_expt_syst({&app_expt_fhc_syst, &app_expt_rhc_syst, &dis_expt_fhc_syst, &dis_expt_rhc_syst, &penalty});
+        MultiExperiment full_expt_syst({&app_expt_fhc_syst, &app_expt_rhc_syst, &dis_expt_fhc_syst, &dis_expt_rhc_syst, &penalty});
 
-	Fitter fit_syst(&full_expt_syst, oscVars, systlist);
+        Fitter fit_syst(&full_expt_syst, oscVars, systlist);
 
-	//std::cout << "before: " << thisdcp << " " << testOsc->GetdCP() << " " << testOsc->GetTh13()*180/TMath::Pi() << std::endl;
-	thischisq = fit_syst.Fit(testOsc, Fitter::kQuiet);
-	//std::cout << "after: " << thisdcp << " " << testOsc->GetdCP() << " " << testOsc->GetTh13()*180/TMath::Pi() << " " << thischisq << std::endl;
+        //std::cout << "before: " << thisdcp << " " << testOsc->GetdCP() << " " << testOsc->GetTh13()*180/TMath::Pi() << std::endl;
+        thischisq = fit_syst.Fit(testOsc, Fitter::kQuiet);
+        //std::cout << "after: " << thisdcp << " " << testOsc->GetdCP() << " " << testOsc->GetTh13()*180/TMath::Pi() << " " << thischisq << std::endl;
 
-	chisqmin = TMath::Min(thischisq,chisqmin);
+        chisqmin = TMath::Min(thischisq,chisqmin);
       }
 
       chisqmin = TMath::Max(chisqmin,1e-6);
       std::cout << thisdcp << " " << TMath::Sqrt(chisqmin) << std::endl;
       if (hie > 0) {
-	gMH_NH->SetPoint(gMH_NH->GetN(),thisdcp/TMath::Pi(),TMath::Sqrt(chisqmin));
+        gMH_NH->SetPoint(gMH_NH->GetN(),thisdcp/TMath::Pi(),TMath::Sqrt(chisqmin));
       }
       else {
-	gMH_IH->SetPoint(gMH_IH->GetN(),thisdcp/TMath::Pi(),TMath::Sqrt(chisqmin));
+        gMH_IH->SetPoint(gMH_IH->GetN(),thisdcp/TMath::Pi(),TMath::Sqrt(chisqmin));
       }
     }
   }

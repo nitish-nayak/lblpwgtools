@@ -110,7 +110,7 @@ IExperiment *GetPenalty(int hie, int oct, std::string penalty,
   }
 
   Penalizer_GlbLike *ret =
-      new Penalizer_GlbLike(hie, oct, useTh13, useDmsq32, useTh23, 0);
+      new Penalizer_GlbLike(hie, oct, useTh13, useTh23, useDmsq32, 0);
   ret->SetAsimovPoint(asimov_set, modConstraint);
   return ret;
 }
@@ -633,7 +633,7 @@ std::string GetSampleName(SampleType sample) {
     return "ND_nue";
   case kNDFHC_OA /*how you like this space, Callum?*/:
     return "ND_FHC_OA";
-  case /* LOVE IT M8                */ kUnknown:
+  case /* LOVE IT M8                */ kSAMPLEUNKNOWN:
   default:
     return "NONE";
   }
@@ -653,7 +653,7 @@ SampleType GetSampleType(std::string const &sample) {
     return kNDNue;
   if (sample == "ND_FHC_OA")
     return kNDFHC_OA;
-  return kUnknown;
+  return kSAMPLEUNKNOWN;
 }
 
 void MakePredictionInterp(TDirectory *saveDir, SampleType sample,

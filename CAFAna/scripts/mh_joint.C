@@ -2,6 +2,16 @@
 
 using namespace ana;
 
+// stateFname - just provide without the .root stub and it'll combine state files
+// systSet - "allsyst"
+// sampleString - "fd:14.4"
+// penaltyString - "th13"
+// asimov_joint - "asimov0"
+// FOR EG (for 14.4 kt-MW-yr exposure):
+// cafe -b scripts/mh_joint.C "../../luke_v4_all/State" "../../mh_sens_fd_allsyst.root" "allsyst" "fd:14.4" "th13" 1 "ssth23:0.58"
+// to change fhc/rhc frac from default 0.5, 0.5 one can do
+// cafe -b scripts/mh_joint.C "../../luke_v4_all/State" "../../mh_sens_fd_allsyst.root" "allsyst" "fd:14.4:fhc1.0:rhc0.0" "th13" 1 "ssth23:0.58"
+
 void mh_joint(std::string stateFname="common_state_mcc11v3.root",
 	      std::string outputFname="mh_sens_ndfd_nosyst.root",
 	      std::string systSet = "nosyst", std::string sampleString = "ndfd",
