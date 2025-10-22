@@ -12,7 +12,7 @@ void load(std::string lib) {
   }
 }
 
-void load_libs(bool MustClean = true) {
+void load_libs_dune(bool MustClean = true) {
   // All the CINT exception handler does is obfuscate the stack. With this,
   // uncaught exceptions immediately show a useful backtrace under gdb.
   //  G__SetCatchException(0);
@@ -43,7 +43,7 @@ void load_libs(bool MustClean = true) {
   TString includes = "-I$ROOTSYS/include -I$CAFANA/include";
 
   const std::vector<std::string> libs = {
-      "Minuit2",          "Net",           "StandardRecord", "OscLibFunc",
+      "Minuit2",          "StandardRecord", "OscLibFunc",
       "UtilitiesFunc",    "CAFAnaCore",    "CAFAnaVars",     "CAFAnaCuts",
       "CAFAnaExperiment", "CAFAnaSysts",   "CAFAnaDecomp",   "CAFAnaExtrap",
       "CAFAnaPrediction", "CAFAnaAnalysis", "boost_filesystem", "boost_system"};
